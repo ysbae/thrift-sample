@@ -1,0 +1,19 @@
+{
+  "name": "ysbae/thrift-sample",
+  "version": "0.0.1",
+  "description": "Thrift-generated package for Bootake internal API",
+  "homepage": "https://github.com/ysbae/thrift-sample",
+  "authors": [{
+    "name": "Young Sub Bae",
+    "email": "youngsub.bae@meshkorea.net",
+    "homepage": "meshkorea.net"
+  }],
+  "require": {
+    "php" : ">=5.3.0"
+  },
+  "autoload": {
+    "files": [
+      "dist-php/autoload.php"
+    ]
+  }
+}

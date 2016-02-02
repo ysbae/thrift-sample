@@ -1,0 +1,19 @@
+{
+  "name": "thrift-sample",
+  "version": "0.0.1",
+  "description": "Thrift-generated package for Bootake internal API",
+  "private": true,
+  "homepage": "https://github.com/ysbae/thrift-sample",
+  "main": "dist-js/thrift-sample.js",
+  "authors": [
+    "Young Sub Bae <youngsub.bae@meshkorea.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dist-php",
+    "docs"
+  ]
+}
