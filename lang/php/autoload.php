@@ -18,4 +18,4 @@ function thrift_autoload($className) {
 	}
 }
 
-spl_autoload_register('bootake_thrift_autoload');
+spl_autoload_register('thrift_autoload');
