@@ -1,6 +1,6 @@
 {
   "name": "ysbae/thrift-sample",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Thrift-generated package for Bootake internal API",
   "homepage": "https://github.com/ysbae/thrift-sample",
   "authors": [{
