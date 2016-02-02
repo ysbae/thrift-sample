@@ -1,41 +1,51 @@
+namespace php Mesh.Delivery
+
+/** Timestamp in epoch */
+typedef i64 Timestamp
+
+typedef string AccessToken
+
 /**
  * 배송 상태
  */
 enum DeliveryStatus {
     /** 주문 접수됨 */
-	SUBMITTED,
+	SUBMITTED = 1,
 	/** 배송기사가 배정됨 */
-	DRIVER_ASSIGNED,
-	/** 물품을 픽업함 */
-	PICKED_UP,
+	DELIVERING = 2,
 	/** 물품을 전달함 */
-	DELIVERED,
+	COMPLETED = 10,
 	/** 배송 취소됨 */
-	CANCELED
+	CANCELLED = 11
+}
+
+enum Gender {
+    FEMALE = 1,
+    MALE = 2
 }
 
 /**
  * 배송기사
  */
-struct Driver {
+struct Courier {
     /** 아이디 */
-	1: optional i32 id,
+	1: required i32 id,
 	/** 이름 */
-	2: optional string name,
+	2: required string name,
 	/** 전화번호 */
-	3: optional string phone,
-	/** 배송기사 위치 */
-	4: optional Location location,
+	3: required string phone,
+
+	4: optional Gender gender
 }
 
 /**
  * 위치 정보
  */
-struct Location {
+struct LatLng {
 	/** 위도 */
-	1: optional double lat,
+	1: required double lat,
 	/** 경도 */
-	2: optional double lng
+	2: required double lng
 }
 
 /**
@@ -61,31 +71,41 @@ enum ErrorCode {
     /** No information available about the error */
     UNKNOWN = 1,
 
-    /** Username and/or password incorrect */
-    INVALID_AUTH = 2,
+    /** The format of the request data was incorrect */
+    BAD_DATA_FORMAT = 2,
+
+    /** A required parameter/field was absent */
+    DATA_REQUIRED = 3,
+
+    /** Access token is invalid */
+    INVALID_AUTH = 4
 }
 exception Exception {
 	/** The numeric code indicating the type of error that occurred. */
 	1: optional ErrorCode code,
 
     /** If the error applied to a particular input parameter, this will indicate which parameter. */
-	2: optional string parameter
+	2: optional string parameter,
+
+	3: optional string message
 }
 
 service DeliveryService {
-	void submit(1: Delivery delivery)
-	  throws (1: Exception exception),
+	Delivery submit(1: AccessToken accessToken, 2: Delivery delivery)
+            throws (1: Exception exception)
 
-	void assignDriver(1: string deliveryId,
-		              2: i32 driverId)
-	  throws (1: Exception exception),
+    Delivery get(1: AccessToken accessToken, 2: i32 deliveryId)
+        throws (1: Exception exception)
 
-	void pickup(1: string deliveryId)
-	  throws (1: Exception exception),
+    list<Delivery> list(1: AccessToken accessToken, 2: i32 offset, 3: i32 limit)
+        throws (1: Exception exception)
 
-	void complete(1: string deliveryId)
-	  throws (1: Exception exception),
+    Delivery assignCourier(1: AccessToken accessToken, 2: i32 deliveryId, 3: i32 courierId)
+        throws (1: Exception exception)
 
-	void cancel(1: string deliveryId)
-	  throws (1: Exception exception),
+    Delivery cancel(1: AccessToken accessToken, 2: i32 deliveryId)
+        throws (1: Exception exception)
+
+    Delivery complete(1: AccessToken accessToken, 2: i32 deliveryId)
+        throws (1: Exception exception)
 }
