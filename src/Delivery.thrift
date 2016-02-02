@@ -1,4 +1,7 @@
 namespace php Mesh.Delivery
+namespace js  Mesh.Delivery
+namespace cocoa MD
+namespace java com.mesh.delivery
 
 /** Timestamp in epoch */
 typedef i64 Timestamp
@@ -53,15 +56,17 @@ struct LatLng {
  */
 struct Delivery {
     /** 주문 번호 */
-	1: optional string deliveryId,
-	/** 주문 상태 */
-	2: optional DeliveryStatus status,
-	/** 주문 수행 배송기사 */
-	3: optional Driver driver,
-	/** 출발지 */
-	4: optional Location origin,
-	/** 도착지 */
-	5: optional Location dest
+    1: required string id,
+    /** 출발지 */
+    2: required LatLng origin,
+    /** 도착지 */
+    3: required LatLng destination,
+    /** 주문 상태 */
+    4: required DeliveryStatus status,
+    /** 주문 수행 배송기사 */
+    5: optional Courier courier,
+    /** 접수 시각 */
+    6: required Timestamp createdAt
 }
 
 /**
@@ -80,7 +85,7 @@ enum ErrorCode {
     /** Access token is invalid */
     INVALID_AUTH = 4
 }
-exception Exception {
+exception ServiceException {
 	/** The numeric code indicating the type of error that occurred. */
 	1: optional ErrorCode code,
 
@@ -91,21 +96,21 @@ exception Exception {
 }
 
 service DeliveryService {
-	Delivery submit(1: AccessToken accessToken, 2: Delivery delivery)
-            throws (1: Exception exception)
+	Delivery submitDelivery(1: AccessToken accessToken, 2: Delivery delivery)
+            throws (1: ServiceException e)
 
-    Delivery get(1: AccessToken accessToken, 2: i32 deliveryId)
-        throws (1: Exception exception)
+    Delivery getDelivery(1: AccessToken accessToken, 2: i32 deliveryId)
+        throws (1: ServiceException e)
 
-    list<Delivery> list(1: AccessToken accessToken, 2: i32 offset, 3: i32 limit)
-        throws (1: Exception exception)
+    list<Delivery> listDeliveries(1: AccessToken accessToken, 2: i32 offset, 3: i32 limit)
+        throws (1: ServiceException e)
 
     Delivery assignCourier(1: AccessToken accessToken, 2: i32 deliveryId, 3: i32 courierId)
-        throws (1: Exception exception)
+        throws (1: ServiceException e)
 
-    Delivery cancel(1: AccessToken accessToken, 2: i32 deliveryId)
-        throws (1: Exception exception)
+    Delivery cancelDelivery(1: AccessToken accessToken, 2: i32 deliveryId)
+        throws (1: ServiceException e)
 
-    Delivery complete(1: AccessToken accessToken, 2: i32 deliveryId)
-        throws (1: Exception exception)
+    Delivery completeDelivery(1: AccessToken accessToken, 2: i32 deliveryId)
+        throws (1: ServiceException e)
 }
